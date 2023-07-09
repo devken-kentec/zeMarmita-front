@@ -1,0 +1,55 @@
+<div class="col-md-12">
+  <nav>
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item active">Listagem</li>
+    </ol>
+  </nav>
+  <div class="row mb-4">
+    <div class="col-md">
+      <h1 class="h5 border-left pl-2">
+        Lista de Cardápio
+      </h1>
+    </div>
+    <div class="col-md">
+      <button routerLink="new" class="btn btn-primary float-right">
+        <i class="fas fa-user-plus"></i> Cadastrar Novo Cardápio
+      </button>
+    </div>
+  </div>
+  <div id="table" class="table-responsive">
+    <table class="table table-borderless">
+      <thead>
+        <tr class="bg-info text-light">
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Dia da Semana</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cardapio of cardapios" >
+          <td>{{ cardapio.id }}</td>
+          <td>{{ cardapio.tipo }} </td>
+          <td>{{ cardapio.diaSemana }} </td>
+          <td>{{ cardapio.status }}</td>
+          <td>
+            <button  (click)="editar(cardapio.id)" class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i>Editar</button>
+            <button  data-toggle="modal" data-target="#ModalExclusao" class="btn btn-outline-danger btn-sm"><i class="fas fa-user-slash"></i>Inativar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-body">
+    <ng-template #loading>
+      <div class="spinner-border text-success" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+
+

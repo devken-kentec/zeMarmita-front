@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: inherit;
+}
+
+.bloco01 {
+  border: 1px solid black !important;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.bloco02 {
+  box-shadow: 0px 0px 10px black;
+  margin-bottom: 10px;
+}
+
+

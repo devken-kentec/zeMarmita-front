@@ -1,0 +1,309 @@
+<div class="col-12 col-md-12">
+  <div class="row mt-4 d-flex justify-content-center">
+    <div>
+      <div class="col-12 col-md-12 ">
+          <h5>Olá, {{ nome }}</h5>
+    </div>
+    </div>
+  </div>
+  <hr/>
+  <div class="row" *ngIf="status == 'Ativo' ">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="col-12 col-md-6">
+        <button type="button" class="btn btn-success btn-block" (click)="fazerPedido()">
+          + Fazer Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row col-12 col-md-12 mt-3"  *ngIf="mostrarPedirPedidos">
+    <div class="col-12 col-md-12 d-flex justify-content-around">
+      <button type="button" class="btn btn-success"  (click)="iniciarPedido()">
+        Sim, Eu Quero!
+      </button>
+      <button type="button" class="btn btn-danger" (click)="finalizarPedido()">
+        Agora Não!
+      </button>
+    </div>
+  </div>
+  <hr>
+  <form class="needs-validation" novalidate [formGroup]="pedidoForm">
+  <div class="row" *ngIf="numeroPedido != 0">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div>
+        <div class="col-12 col-md-12">
+          Número do Seu Pedido : <span style="font-size: 14pt; color:blue">{{ numeroPedido }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="escolharItensMarmita">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="form-group col-12 col-md-6">
+        <label for="tipo">Valor da Marmita:</label>
+        <select id="tipo" class="form-control" formControlName="valorMarmita">
+          <option *ngFor="let valor of valores" [value]="valor.valor">{{ valor.descricao }} - {{ valor.valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="escolharItensMarmita">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="col-12 col-md-6">
+        <div class="form-group col-md-12">
+          <label for="itemCardapio">Escolha os Itens:</label>
+          <select multiple class="form-control" id="itemCardapio" formControlName="itemDescricao" size="10">
+              <option style="padding: 7px; margin-bottom: 5px;" *ngFor="let itemCardapio of itensCardapio" [value]="itemCardapio.itemDescricao">{{ itemCardapio.itemDescricao }}</option>
+          </select>
+            <button class="btn btn-warning col-12 btn-sm mt-1" style="font-weight: bold;" (click)="limparItensSelecionados()" >Limpar Itens Selecionados</button>
+          <small class="form-text text-muted">Em celulares mantenha pressionado por alguns instantes sobre o alimento para escolher.</small>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="escolharItensMarmita">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="col-12 col-md-6">
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#incluirPedido" [disabled]="!pedidoForm.valid">
+          + Incluir na Marmita
+        </button>
+      </div>
+    </div>
+  </div>
+  <!--<div class="row" *ngIf="btnFecharPedido">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="col-12 col-md-6">
+        <button type="button" class="btn btn-success btn-block" >
+          Fechar Pedido {{ numeroPedido }}
+        </button>
+      </div>
+    </div>
+  </div>-->
+  <!-- Modal -->
+  <div class="modal fade" id="incluirPedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel">Confirmação de Pedido N.º <span style="color: blue; font-weight: bold;"> {{ numeroPedido }}</span>.</h6>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="needs-validation" novalidate [formGroup]="incluirPedidoForm">
+          <div class="col-12 col-md-12">
+            <div class="row col-12 col-md-12 mb-2">Qual é o Pedido? {{ nome }}!</div>
+            <div class="row col-12 col-md-12">Quero&nbsp;<input style="text-align: center; margin-top: -5px;" (blur)="incluirPedido()" type="number" class="form-control col-3 col-md-4" id="quantidade"formControlName="quantidade"/>, Marmita(as)!</div>
+            <div class="row">Tendo: <textarea class="form-control" id="itens" rows="4" formControlName="itens" readonly></textarea></div>
+            <div class="row col-12 col-md-12 mt-2"><span>Preço Unitario: R$ {{ precoUnitario }}</span>&nbsp;<span>Preço Total: {{ valorTotal }}</span></div>
+            <div class="form-group col-12 col-md-12">
+                <label for="formaPagamento">Forma Pagamento:</label>
+                <select id="formaPagamento" class="form-control" formControlName="tipoPagamento">
+                  <option value="Nenhum" selected>Nenhum</option>
+                  <option>Dinheiro</option>
+                  <option>PIX</option>
+                  <option>Transferência</option>
+                  <option>Débito</option>
+                  <option>Crédito</option>
+                  <option>Depósito</option>
+                  <option>Ticket Alimentação</option>
+                </select>
+                <small *ngIf="incluirPedidoForm.value['tipoPagamento'] == 'PIX'">Chave PIX: 012.852.456-88</small>
+                <small *ngIf="incluirPedidoForm.value['tipoPagamento'] == 'Transferência'">AG: 3321, Conta: 2136-9</small>
+            </div>
+            <div class="form-group col-12 col-md-12">
+              <label for="retirarProduto">Retirar Produto:</label>
+              <select id="retirarProduto" class="form-control" formControlName="retiradaProduto">
+                <option value="Nenhum" selected>Nenhum</option>
+                <option>Retirar no Local</option>
+                <option>Consumir no Local</option>
+                <option>Entregar</option>
+              </select>
+          </div>
+            <div class="row">Obs.: <input style="margin-top: -5px;" type="text" class="form-control col-12 col-md-12" id="observacao" formControlName="observacao"/></div>
+          </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-success" (click)="enviarPedido()">Enviar Pedido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="fecharPedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          Fechamento do Pedido <span class="text-success" style="font-weight: bold; font-size: 20pt;">{{ numeroPedido }}</span>.
+        </div>
+        <div class="modal-body">
+          <div class="text-justify">
+            Caso já tenha feito todos os seus pedidos, click em <span class="text-success" style="font-weight: bold;">OK</span>
+            para fechar o Pedido, é assim o sistema irá calcular o valor e enviar pedido para ser montado pelo restaurante!
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Não, fechar!</button>
+          <button type="button" class="btn btn-success" (click)="fecharPedido(numeroPedido)">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12 d-flex justify-content-center mt-1">
+      <div class="col-12 col-md-6">
+        <span style="font-weight: bold;">Meus Pedidos</span><br>
+        <small *ngIf="mostrarPedirPedidos">Após realizar os pedidos, click no botão <span class="btn btn-outline-info btn-sm"><i class="fas fa-tasks"></i></span>
+          ,que está na lista abaixo, para que o pedido sejá calculado é montado pelo restaurante!</small>
+      </div>
+    </div>
+  </div>
+<div class="col-12 col-md-12 d-flex justify-content-center mt-1" style="overflow: auto; max-height: 500px;">
+  <div id="table" class="table-responsive">
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr class="bg-info text-light">
+          <th><small>Pedido/<br>Nome/<br>Data</small> </th>
+          <th><small>Informações<br>Gerais</small></th>
+          <th><small>Pedido/<br>Bebidas/<br>V.Total</small></th>
+          <th><small>Ações</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidosItemRetorno" style="font-size: 9pt;">
+            <td>
+              <span class="text-center" style=" font-weight: bold;">{{ pedido.idPedido }}</span><br>
+                {{ pedido.nome }}<br>
+                {{ globalService.formatarDate(pedido.dataPedido) }}
+            </td>
+            <td>
+              <small>
+                {{ pedido.tipoPagamento }} - {{ pedido.statusPagamento }}<br>
+                Qdt. {{ pedido.quantidade }} - {{ pedido.descricao }}<br>
+                V.U.: {{ pedido.precoUnitario.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}<br>
+                P.T.: {{ pedido.precoTotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}<br>
+                <button class="btn btn-sm btn-warning mt-1" data-toggle="modal" data-target="#pedidoBebidas" (click)="pedirBebidas(pedido.idPedido)">
+                  <small>Adicionar Bebidas</small></button>
+              </small>
+            </td>
+            <td>
+              <small>
+                {{ pedido.statusPedidoItem }}<br>
+                <span *ngIf="pedido.valorPedido">{{ pedido.valorPedido.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</span>
+                <span *ngIf="pedido.valorBebida != null">{{ pedido.valorBebida.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</span>
+                <span *ngIf="pedido.valorBebida != null">{{ somarPedidoBebida(pedido.valorPedido, pedido.valorBebida).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</span>
+              </small>
+            </td>
+            <td>
+              <button *ngIf="pedido.statusPedidoItem == 'Aberto' "  title="Fechar Conta" class="btn btn-outline-primary btn-sm mb-1" data-toggle="modal" data-target="#fecharPedido" (click)="passarNumeroPedido(pedido.idPedido)"><i class="fas fa-tasks"></i></button>
+              <button *ngIf="pedido.statusPedidoItem == 'Fechado' " class="btn btn-outline-info btn-sm mb-1" data-toggle="modal" data-target="#editarPedido" (click)="editarPedido(pedido)"><i class="far fa-money-bill-alt"></i></button>
+              <button (click)="cancelarPedido(pedido.id)" class="btn btn-outline-danger btn-sm mb-1"><i class="fas fa-trash-alt"></i></button><br>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="editarPedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <div>Fechamento é Pagamento do Pedido: <span class="text-success" style="font-weight: bold; font-size: 20pt;">{{ numeroPedido }}</span></div>.
+        </div>
+        <div class="modal-body">
+          <div class="text-justify">
+            Caso tenha sido adicionado algum outro item ao pedido {{ numeroPedido }}, clique em <span class="text-success" style="font-weight: bold;">OK</span>
+            para recalcular o valor com os novos itens adicionados!
+          </div>
+          <hr>
+          <button type="button" class="btn btn-success btn-block" (click)="fecharPedido(numeroPedido)">OK</button>
+          <hr>
+          <div class="text-justify">
+            <div *ngIf="statusPagamento != 'Pago' &&  tipoPagamento != 'Dinheiro' ">
+              <div class="row" style="margin-left: auto; margin-right: auto;">
+                Caso tenha feito PIX ou Transferencia Bancaria, Débito ou Crédito tire PRINT da tela e anexo pelo Botão abaixo.
+              </div>
+              <button class="btn btn-warning btn-sm">
+                <small style="font-size: 10pt;">Comprovante</small>
+              </button>
+            </div>
+            <div *ngIf="statusPagamento != 'Pago' &&  tipoPagamento == 'Dinheiro' ">
+              <div>
+                  Caso o Pagamento seja em dinheiro, repasse ao entregador ou faça o acerto peridiodicamente.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="pedidoBebidas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+         <div>Escolha sua Bebida para o Pedido: <span class="text-success" style="font-weight: bold;">{{ numeroPedido }}</span></div>.
+        </div>
+        <div class="modal-body">
+          <div class="text-justify">
+            <form class="needs-validation" novalidate [formGroup]="bebidaForm">
+              <div class="form-group col-12 col-md-12">
+                <label for="tipo">Bebidas:</label>
+                <select id="tipo" class="form-control" formControlName="idBebida">
+                  <option *ngFor="let bebida of items" [value]="bebida.id">{{ bebida.descricao}} - {{ bebida.tamanho }} - R$ {{ bebida.valorUnitario.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</option>
+                </select>
+              </div>
+              <div class="form-group col-12 col-md-12">
+                <label for="quantidade">Quantidade:</label>
+                <input type="numner" class="form-control" id="quantidade" style="text-align: center;"
+                  formControlName="quantidade"/>
+              </div>
+              <div class="mb-2">
+                <button type="button" class="btn btn-success btn-block" (click)="solicitarBebida(numeroPedido)" [disabled]="!bebidaForm.valid">Incluir Bebida</button>
+              </div>
+            </form>
+          </div>
+          <div id="table" class="table-responsive">
+            <table class="table table-sm table-borderless">
+              <thead>
+                <tr class="bg-info text-light">
+                  <th>Quant.</th>
+                  <th>Descrição</th>
+                  <th>Total</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let beb of bebidas" >
+                  <td>{{ beb.quantidade }}</td>
+                  <td>{{ beb.descricao }} </td>
+                  <td>{{ beb.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</td>
+                  <td>
+                    <button class="btn btn-outline-danger btn-sm" (click)="excluirBebida(beb.id)"><i class="fas fa-trash-alt"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-end mr-5"><span *ngIf="somadorBebida != null"> {{ somadorBebida.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) }}</span></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Sair</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</form>
+</div>
+<!-- <div>
+  <pre>
+    {{ pedidoForm.value | json }}
+  </pre>
+</div>-->
+

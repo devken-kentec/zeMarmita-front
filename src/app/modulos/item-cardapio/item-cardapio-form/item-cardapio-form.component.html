@@ -1,0 +1,83 @@
+<div class="col-12">
+  <nav>
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item"><a routerLink="/cardapio">Cardápio</a></li>
+      <li class="breadcrumb-item active">Cadastro</li>
+    </ol>
+  </nav>
+  <div class="row mb-4">
+    <div class="col-md">
+      <h1 class="h5 border-left pl-2">
+        Formulário Para Montagem do Cardápio
+      </h1>
+    </div>
+    <div class="col-md-4">
+      <button routerLink="/cardapio" class="btn btn-warning btn-block float-right">
+        <i class="fas fa-backward"></i>&nbsp;Voltar
+      </button>
+    </div>
+  </div>
+  <form class="needs-validation" novalidate [formGroup]="itemCardapioForm">
+    <div class="card">
+      <div class="card-header bg-info" style="color: white; font-weight: bold;">
+        Incluir Cadastro do Cardápio.
+      </div>
+      <div class="card-body">
+        <div class="form-row col-md-12">
+          <div class="col-12 col-md-6">
+            <div class="form-group col-md-12">
+                <label for="itemCardapio">Detalhamento de Serviços:</label>
+                <select multiple class="form-control" id="itemCardapio" formControlName="idItem" size="10">
+                    <option *ngFor="let item of itens" [value]="item.id">{{ item.descricao }}</option>
+                </select>
+                <small class="form-text text-muted">Para multipla seleção mantenha a tecla Ctrl pressionada.</small>
+            </div>
+            <div class="form-row col-md-12 mb-1">
+              <button class="btn btn-primary col-12 col-md-4" (click)="onSubmit()">
+                  Incluir Itens
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div id="table" class="table-responsive col-12">
+              <table class="table table-borderless">
+                <thead>
+                  <tr class="bg-info text-light">
+                    <th>ID</th>
+                    <th>Item</th>
+                    <th>Dia da Semana</th>
+                    <th>Retirar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor="let itemCardapio of itensCardapio">
+                    <td>{{ itemCardapio.id }}</td>
+                    <td>{{ itemCardapio.itemDescricao }}</td>
+                    <td>{{ itemCardapio.diaCardapio }}</td>
+                    <td>
+                      <button (click)="retirarCardapio(itemCardapio.id)" data-toggle="modal" data-target="#ModalExclusao" class="btn btn-outline-danger btn-sm"><i class="fas fa-user-slash"></i>Inativar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </form>
+    <div>
+      <pre>
+        {{ itemCardapioForm.value | json}}
+      </pre>
+  </div>
+  </div>
+
+
+
+
+
+

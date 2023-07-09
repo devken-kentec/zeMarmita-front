@@ -1,0 +1,85 @@
+<div class="col-12">
+  <nav>
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item"><a routerLink="/cadastro">Listagem</a></li>
+      <li class="breadcrumb-item active">Cadastro</li>
+    </ol>
+  </nav>
+  <div class="row mb-4">
+    <div class="col-md">
+      <h1 class="h5 border-left pl-2">
+        Formulário de Valores
+      </h1>
+    </div>
+    <div class="col-md-4">
+      <button routerLink="/valores" class="btn btn-warning btn-block float-right">
+        <i class="fas fa-backward"></i>&nbsp;Voltar
+      </button>
+    </div>
+  </div>
+  <form class="needs-validation" novalidate [formGroup]="valoresForm">
+    <div class="card">
+      <div class="card-header bg-info" style="color: white; font-weight: bold;">
+        Incluir Cadastro de Valor.
+      </div>
+      <div class="card-body">
+        <div class="form-row col-md-12">
+          <div class="form-group col-md-1">
+            <label for="id">Código:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              formControlName="id"
+              readonly
+            />
+          </div>
+          <div class="form-group col-md-5">
+            <label for="descricao">Descrição:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="descricao"
+              formControlName="descricao"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="valor">Valor:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="valor"
+              formControlName="valor"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="status">Status:</label>
+            <select id="status" class="form-control" formControlName="status">
+              <option value="Nenhum" selected>Nenhum</option>
+              <option>Ativo</option>
+              <option>Inativo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+    <button
+      type="submit"
+      (click)="onSubmit()"
+      class="btn btn-success float-right mt-3 col-md-4">
+      <i class="fas fa-save"></i> &nbsp;{{ valoresForm.value.id == "" ? 'Salvar' : 'Alterar'}}
+    </button>
+    <div>
+      <pre>
+        {{ valoresForm.value | json}}
+      </pre>
+  </div>
+  </div>
+
+
+
+
+
+

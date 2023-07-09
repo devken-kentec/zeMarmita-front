@@ -1,0 +1,105 @@
+<div class="col-12">
+  <nav>
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a routerLink="/">Início</a></li>
+      <li class="breadcrumb-item"><a routerLink="/cadastro">Listagem</a></li>
+      <li class="breadcrumb-item active">Cadastro</li>
+    </ol>
+  </nav>
+  <div class="row mb-4">
+    <div class="col-md">
+      <h1 class="h5 border-left pl-2">
+        Formulário de Cardápios
+      </h1>
+    </div>
+    <div class="col-md-4">
+      <button routerLink="/cardapio" class="btn btn-warning btn-block float-right">
+        <i class="fas fa-backward"></i>&nbsp;Voltar
+      </button>
+    </div>
+  </div>
+  <form class="needs-validation" novalidate [formGroup]="cardapioForm">
+    <div class="card">
+      <div class="card-header bg-info" style="color: white; font-weight: bold;">
+        Incluir Cadastro do Cardápio.
+      </div>
+      <div class="card-body">
+        <div class="form-row col-md-12">
+          <div class="form-group col-md-1">
+            <label for="id">Código:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              formControlName="id"
+              readonly
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" class="form-control" formControlName="tipo">
+              <option selected="">Nenhum</option>
+              <option>Marmita</option>
+              <option>Prato Executivo</option>
+            </select>
+          </div>
+          <div class="form-group col-md-5">
+            <label for="diaSemana">Dia da Semana:</label>
+            <select id="diaSemana" class="form-control" formControlName="diaSemana">
+              <option selected="">Nenhum</option>
+              <option>Segunda-Feira</option>
+              <option>Terça-Feira</option>
+              <option>Quarta-Feira</option>
+              <option>Quinta-Feira</option>
+              <option>Sexta-Feira</option>
+              <option>Sabádo</option>
+              <option>Domingo</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="status">Status:</label>
+            <select id="status" class="form-control" formControlName="status">
+              <option selected="">Nenhum</option>
+              <option>Ativo</option>
+              <option>Inativo</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row col-12 col-md-12">
+          <div class="form-group col-md-12">
+            <label for="observacao">Observação:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="observacao"
+              formControlName="observacao"
+            />
+          </div>
+        </div>
+        <div class="form-row col-md-12">
+            <button class="btn btn-primary" *ngIf="incluirItemCardapio" (click)="incluirItensCardapio()">
+                Incluir Itens
+            </button>
+        </div>
+      </div>
+    </div>
+  </form>
+    <button
+      type="submit"
+      (click)="onSubmit()"
+      class="btn btn-success float-right mt-3 col-md-4">
+      <i class="fas fa-save"></i> &nbsp;{{ cardapioForm.value.id == "" ? 'Salvar' : 'Alterar'}}
+    </button>
+    <div>
+      <pre>
+        {{ cardapioForm.value | json}}
+      </pre>
+  </div>
+  </div>
+
+
+
+
+
+
+
